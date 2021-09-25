@@ -4,6 +4,13 @@
 #include "game-importer.cpp"
 
 namespace Instances { Instance<ProgramWindow> programWindow; }
+
+#if defined(PLATFORM_MACOS)
+#define ELLIPSIS "\u2026"
+#else
+#define ELLIPSIS " ..."
+#endif
+
 ProgramWindow& programWindow = Instances::programWindow();
 SystemSelection& systemSelection = programWindow.systemSelection;
 Home& home = programWindow.home;
@@ -26,9 +33,8 @@ ProgramWindow::ProgramWindow() {
   });
 
   helpMenu.setText("Help");
-  aboutAction.setIcon(Icon::Prompt::Question).setText("About ...").onActivate([&] {
-    image logo{Resource::Ares::Logo};
-    logo.shrink();
+  aboutAction.setIcon(Icon::Prompt::Question).setText("About" ELLIPSIS).onActivate([&] {
+    multiFactorImage logo(Resource::Ares::Logo1x, Resource::Ares::Logo2x);
     AboutDialog()
     .setName({ares::Name, "/mia"})
     .setLogo(logo)
